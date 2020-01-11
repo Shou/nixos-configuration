@@ -2,7 +2,7 @@
 
 {
   dconf.settings = {
-    "/desktop/ibus/general" = {
+    "desktop/ibus/general" = {
       preload-engines = "['mozc-jp', 'xkb:us:altgr-intl:eng']";
     };
     "org/gnome/desktop/interface" = {
@@ -36,6 +36,6 @@
       move-to-workspace-8 = "['<Super><Shift>8']";
       move-to-workspace-9 = "['<Super><Shift>9']";
     };
-    "/org/gnome/terminal/legacy/".default-show-menubar = false;
+    "org/gnome/terminal/legacy/".default-show-menubar = false;
   };
 }
