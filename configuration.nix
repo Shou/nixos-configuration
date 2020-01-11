@@ -54,9 +54,11 @@ in rec {
   nix.nrBuildUsers = 128;
 
   nix.binaryCachePublicKeys = [
+    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     "all-hies.cachix.org-1:JjrzAOEUsD9ZMt8fdFbzo3jNAyEWlPAwdVuHw4RD43k="
   ];
   nix.binaryCaches = [
+    "https://cache.nixos.org"
     "https://all-hies.cachix.org"
   ];
 
@@ -91,7 +93,14 @@ in rec {
   };
 
   fonts.fonts = with pkgs; [
-    noto-fonts-emoji emojione carlito ipafont kochi-substitute lmodern
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    emojione
+    lmodern
+    carlito
+    ipafont
+    kochi-substitute
   ];
 
   # Set your time zone.
@@ -100,13 +109,14 @@ in rec {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim tmux firefox spotify paprefs qbittorrent pavucontrol hexchat bat ripgrep fd
+    neovim tmux firefox spotify paprefs pavucontrol hexchat bat ripgrep fd
     mpv smplayer docker chrome-gnome-shell fish nix-index docker_compose git
     noto-fonts-emoji emojione xsel bazel gnumake imagemagick curl direnv
     stack xvfb_run jq pcre kdiff3 postgresql_10 poppler_utils xmlstarlet
     libssh2 libxml2 tree gcc binutils autoconf automake gparted alacritty
-    rxvt_unicode haskellPackages.ghcid hlint gimp chromium wine ghc flatpak
+    haskellPackages.ghcid hlint gimp chromium wine ghc flatpak
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
+    google-chrome gnome3.dconf-editor
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -120,7 +130,13 @@ in rec {
   #services.xserver.displayManager.gdm.autoLogin.user = "benedict";
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    forwardX11 = true;
+    passwordAuthentication = false;
+    permitRootLogin = "no";
+    ports = [ 22 443 ];
+  };
 
   services.flatpak.enable = true;
 
@@ -177,7 +193,13 @@ in rec {
 
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
-    # Steam gaymes
+    # This seems to fix popping audio
+    configFile = pkgs.runCommand "default.pa" {} ''
+      sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
+      	${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+    '';
+
+    # Steam games
     support32Bit = true;
   };
 
@@ -211,16 +233,14 @@ in rec {
       gdm = {
         enable = true;
         wayland = false;
-      };
-      lightdm = {
-        enable = false;
+
         autoLogin = {
-          enable = true;
+          # is buggy, disabled for now
+          enable = false;
           user = "benedict";
         };
       };
     };
-
   };
 
   # Define user accounts
@@ -229,7 +249,7 @@ in rec {
       benedict = {
         isNormalUser = true;
         uid = 1000;
-        extraGroups = [ "sudo" "docker" "networkmanager" ];
+        extraGroups = [ "sudo" "docker" "networkmanager" "libvirtd" "kvm" "qemu" ];
         shell = pkgs.fish;
       };
       work = {
@@ -259,10 +279,24 @@ in rec {
     "vm.max_map_count" = 262144;
   };
 
-  boot.kernelModules = [ "kvm-intel" ];
+  ### Virtualisation
+  boot.kernelModules = [
+    "kvm-amd" "kvm-intel"
+    # Add VFIO kernel modules
+    "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"
+  ];
+  # Enable IOMMU
+  boot.kernelParams = [ "amd_iommu=on" "intel_iommu=on" "iommu=pt" ];
+  # Blacklist GPU drivers
+  boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
+
+  # Attach GPU to VFIO driver -- this is for a GTX 1060
+  boot.extraModprobeConfig = "options vfio-pci ids=10de:1c03,10de:10f1";
 
   systemd.extraConfig = ''
     LimitNOFILE=65536
     DefaultLimitNOFILE=65536
+    LimitMEMLOCK=infinity
+    DefaultLimitMEMLOCK=infinity
   '';
 }
