@@ -7,11 +7,7 @@
 let
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
 
-  hw-rev = "89c4ddb0e60e5a643ab15f68b2f4ded43134f492";
-  nixos-hardware = builtins.fetchTarball {
-    url = "https://github.com/NixOS/nixos-hardware/tarball/${hw-rev}";
-    sha256 = "1a0mplnj0zx33f4lm7kwg6z6iwgdkg2pxy58plkj6w59ibfl2l27";
-  };
+  nixos-hardware = import ./nixos-hardware.nix;
 
   pulseConfig = pkgs.writeText "default.pa" ''
     load-module module-device-restore
@@ -27,12 +23,9 @@ let
   '';
 
 in rec {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./hardware-personal.nix
-      "${nixos-hardware}/dell/xps/13-9380"
-    ];
+  imports = [
+    "${nixos-hardware}/dell/xps/13-9380"
+  ];
 
   nixpkgs.config = {
     # Disappoint Stallman
