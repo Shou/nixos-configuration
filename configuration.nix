@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
