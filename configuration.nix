@@ -23,10 +23,6 @@ let
   '';
 
 in rec {
-  imports = [
-    "${nixos-hardware}/dell/xps/13-9380"
-  ];
-
   nixpkgs.config = {
     # Disappoint Stallman
     allowUnfree = true;
@@ -107,7 +103,7 @@ in rec {
     noto-fonts-emoji emojione xsel bazel gnumake imagemagick curl direnv
     stack xvfb_run jq pcre kdiff3 postgresql_10 poppler_utils xmlstarlet
     libssh2 libxml2 tree gcc binutils autoconf automake gparted alacritty
-    haskellPackages.ghcid hlint gimp chromium wine ghc flatpak
+    haskellPackages.ghcid hlint gimp chromium ghc flatpak
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
     google-chrome gnome3.dconf-editor
   ];
@@ -218,7 +214,7 @@ in rec {
       gnome3.enable = true;
     };
     displayManager = {
-      job.preStart = ''
+      job.preStart = pkgs.lib.optionalString config.hardware.pulseaudio.enable ''
         mkdir -p /run/gdm/.config/pulse
         ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
         chown -R gdm:gdm /run/gdm/.config
