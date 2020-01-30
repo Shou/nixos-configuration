@@ -25,7 +25,7 @@ let
 in rec {
   nixpkgs.config = {
     # Disappoint Stallman
-    allowUnfree = lib.mkDefault true;
+    allowUnfree = true;
 
     firefox = {
       enableGoogleTalkPlugin = lib.mkDefault true;
@@ -34,13 +34,13 @@ in rec {
     };
 
     chromium = {
-      enablePepperFlash = lib.mkDefault false;
+      enablePepperFlash = false;
     };
   };
 
   nix.trustedUsers = lib.mkDefault [ "root" "benedict" "@sudo" ];
 
-  nix.nrBuildUsers = lib.mkDefault 128;
+  nix.nrBuildUsers = 128;
 
   nix.binaryCachePublicKeys = [
     "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -55,9 +55,7 @@ in rec {
     hostName = lib.mkDefault "shou";
     networkmanager.enable = lib.mkDefault true;
     firewall.enable = lib.mkDefault false;
-  } // (if services.dnscrypt-proxy.enable
-        then { nameservers = [ "127.0.0.1" ]; }
-        else {});
+  };
 
   services.dnscrypt-proxy = {
     enable = lib.mkDefault false;
@@ -183,10 +181,10 @@ in rec {
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
     # This seems to fix popping audio
-    configFile = lib.mkDefault (pkgs.runCommand "default.pa" {} ''
+    configFile = pkgs.runCommand "default.pa" {} ''
       sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
         ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
-    '');
+    '';
 
     # Steam games
     support32Bit = lib.mkDefault true;
@@ -239,13 +237,13 @@ in rec {
         isNormalUser = lib.mkDefault true;
         uid = lib.mkDefault 1000;
         extraGroups = [ "sudo" "docker" "networkmanager" "libvirtd" "kvm" "qemu" ];
-        shell = lib.mkDefault pkgs.fish;
+        shell = pkgs.fish;
       };
       work = {
         isNormalUser = lib.mkDefault true;
         uid = lib.mkDefault 1001;
         extraGroups = [ "sudo" "docker" ];
-        shell = lib.mkDefault pkgs.fish;
+        shell = pkgs.fish;
       };
     };
     groups = {
