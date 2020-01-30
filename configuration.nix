@@ -98,7 +98,7 @@ in rec {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim tmux firefox spotify paprefs pavucontrol hexchat bat ripgrep fd
+    tmux spotify paprefs pavucontrol hexchat bat ripgrep fd
     mpv smplayer docker chrome-gnome-shell fish nix-index docker_compose git
     noto-fonts-emoji emojione xsel bazel gnumake imagemagick curl direnv
     stack xvfb_run jq pcre kdiff3 postgresql_10 poppler_utils xmlstarlet
@@ -185,7 +185,7 @@ in rec {
     # This seems to fix popping audio
     configFile = lib.mkDefault (pkgs.runCommand "default.pa" {} ''
       sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
-      	${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+        ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
     '');
 
     # Steam games
@@ -269,15 +269,6 @@ in rec {
   };
 
   ### Virtualisation
-  boot.kernelModules = [
-    "kvm-amd" "kvm-intel"
-    # Add VFIO kernel modules
-    "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"
-  ];
-  # Enable IOMMU
-  boot.kernelParams = [ "amd_iommu=on" "intel_iommu=on" "iommu=pt" ];
-  # Blacklist GPU drivers
-  boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
 
   # Attach GPU to VFIO driver -- this is for a GTX 1060
   boot.extraModprobeConfig = lib.mkDefault "options vfio-pci ids=10de:1c03,10de:10f1";
