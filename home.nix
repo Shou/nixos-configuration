@@ -117,11 +117,11 @@ set-window-option -g automatic-rename on
     '';
   };
 
-  programs.neovim = {
+  programs.neovim = rec {
     enable = true;
 
-    # withNodeJS = true;
-    # withPython3 = true;
+    withNodeJs = true;
+    withPython3 = true;
 
     plugins = (with pkgs.vimPlugins; [
       vim-colorschemes
@@ -138,7 +138,18 @@ set-window-option -g automatic-rename on
       fzf-vim
     ]);
 
-    extraConfig = ''
+    extraConfig =
+      let
+        loadPlugin = plugin: ''
+            set rtp^=${plugin.rtp}
+            set rtp+=${plugin.rtp}/after
+          '';
+
+      in ''
+" https://github.com/NixOS/nixpkgs/issues/39364#issuecomment-425536054
+filetype off | syn off
+${builtins.concatStringsSep "\n" (map loadPlugin plugins)}
+filetype indent plugin on | syn on
 set shell=/bin/sh
 
 syntax on
@@ -211,12 +222,31 @@ autocmd FileType purescript nnoremap <buffer> <silent> <leader>qa :PaddImportQua
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>g :Pgoto<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>p :Pursuit<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>T :Ptype<CR>
+
+" Javascript syntax config
+let g:javascript_conceal_function = "🔪"
+let g:javascript_conceal_null = "🍩"
+let g:javascript_conceal_this = "🤳"
+let g:javascript_conceal_return = "🔫"
+let g:javascript_conceal_undefined = "🔞"
+let g:javascript_conceal_prototype = "🌃"
+let g:javascript_conceal_super = "💪"
+let g:javascript_conceal_arrow_function = "👉"
+let g:javascript_conceal_noarg_arrow_function = "🌀"
+let g:javascript_conceal_underscore_arrow_function = "🎇"
+
+syntax keyword jsBooleanTrue true conceal cchar=👌
+syntax keyword jsBooleanFalse false conceal cchar=👎
     '';
   };
 
   programs.starship = {
     enable = true;
     enableFishIntegration = true;
+
+    settings = {
+      character.symbol = "➜";
+    };
   };
 
   home.stateVersion = "19.03";
