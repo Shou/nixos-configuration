@@ -3,40 +3,67 @@
 {
   programs.home-manager.enable = true;
 
+  home.packages = (with pkgs; [
+    firefox-bin google-chrome
+  ]);
+
   dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      clock-show-seconds = true;
-      clock-show-date = true;
-    };
-    "org/gnome/desktop/calendar".show-weekdate = true;
-    "org/gnome/desktop/wm/preferences".resize-with-right-button = true;
     "org/gnome/desktop/wm/keybindings" = {
-      close = ["<Super>c"];
-      switch-to-workspace-down = ["<Super>j"];
-      switch-to-workspace-up = ["<Super>k"];
-      move-to-workspace-down = ["<Super><Shift>j"];
-      move-to-workspace-up = ["<Super><Shift>k"];
-      switch-to-workspace-1 = ["<Super>1"];
-      switch-to-workspace-2 = ["<Super>2"];
-      switch-to-workspace-3 = ["<Super>3"];
-      switch-to-workspace-4 = ["<Super>4"];
-      switch-to-workspace-5 = ["<Super>5"];
-      switch-to-workspace-6 = ["<Super>6"];
-      switch-to-workspace-7 = ["<Super>7"];
-      switch-to-workspace-8 = ["<Super>8"];
-      switch-to-workspace-9 = ["<Super>9"];
-      move-to-workspace-1 = ["<Super><Shift>1"];
-      move-to-workspace-2 = ["<Super><Shift>2"];
-      move-to-workspace-3 = ["<Super><Shift>3"];
-      move-to-workspace-4 = ["<Super><Shift>4"];
-      move-to-workspace-5 = ["<Super><Shift>5"];
-      move-to-workspace-6 = ["<Super><Shift>6"];
-      move-to-workspace-7 = ["<Super><Shift>7"];
-      move-to-workspace-8 = ["<Super><Shift>8"];
-      move-to-workspace-9 = ["<Super><Shift>9"];
+      "switch-to-workspace-up" = ["<Super>k"];
+      "switch-to-workspace-down" = ["<Super>j"];
+      "switch-to-workspace-1" = ["<Super>1"];
+      "switch-to-workspace-2" = ["<Super>2"];
+      "switch-to-workspace-3" = ["<Super>3"];
+      "switch-to-workspace-4" = ["<Super>4"];
+      "switch-to-workspace-5" = ["<Super>5"];
+      "switch-to-workspace-6" = ["<Super>6"];
+      "switch-to-workspace-7" = ["<Super>7"];
+      "switch-to-workspace-8" = ["<Super>8"];
+      "switch-to-workspace-9" = ["<Super>9"];
+      "switch-to-workspace-10"  = ["<Super>0"];
+
+      "move-to-workspace-up" = ["<Super><Shift>k"];
+      "move-to-workspace-down" = ["<Super><Shift>j"];
+      "move-to-workspace-1" = ["<Super><Shift>1"];
+      "move-to-workspace-2" = ["<Super><Shift>2"];
+      "move-to-workspace-3" = ["<Super><Shift>3"];
+      "move-to-workspace-4" = ["<Super><Shift>4"];
+      "move-to-workspace-5" = ["<Super><Shift>5"];
+      "move-to-workspace-6" = ["<Super><Shift>6"];
+      "move-to-workspace-7" = ["<Super><Shift>7"];
+      "move-to-workspace-8" = ["<Super><Shift>8"];
+      "move-to-workspace-9" = ["<Super><Shift>9"];
+      "move-to-workspace-10" = ["<Super><Shift>0"];
+
+      "close" = ["<Super>c"];
+      "toggle-fullscreen" = ["<Super>f"];
+      "toggle-maximized" = ["<Super>t"];
     };
-    "org/gnome/terminal/legacy".default-show-menubar = false;
+
     "desktop/ibus/general".preload-engines = [ "mozc-jp" "xkb:us:altgr-intl:eng" ];
+
+    "org/gnome/mutter/keybindings" = {
+      "toggle-tiled-left" = ["<Super>comma"];
+      "toggle-tiled-right" = ["<Super>period"];
+    };
+
+    "org/gnome/shell/app-switcher" = {
+      "current-workspace-only" = true;
+    };
+
+    "org/gnome/desktop/interface" = {
+      "clock-show-seconds" = true;
+      "clock-show-date" = true;
+      "clock-show-weekday" = true;
+    };
+
+    "org/gnome/desktop/calendar".show-weekdate = true;
+
+    "org/gnome/desktop/wm/preferences".resize-with-right-button = true;
+
+    # There is an option under packages.gnome-terminal.showMenubar for
+    # this but it doesn't work????
+    "org/gnome/terminal/legacy".default-show-menubar = false;
   };
 
   programs.fish = {
@@ -44,10 +71,51 @@
 
     interactiveShellInit = ''
       set -gx PATH ~/.npm-packages/bin $PATH
+      set -gx EDITOR nvim
     '';
   };
 
   programs.direnv.enableFishIntegration = true;
+
+  programs.tmux = {
+    enable = true;
+    historyLimit = 10000;
+    shortcut = "x";
+    escapeTime = 0;
+
+    extraConfig = ''
+# mouse support
+set -g mouse on
+
+# make it hjkl instead of left,down,up,right to switch between split panes
+unbind Down
+bind-key -r j select-pane -D
+unbind Up
+bind-key -r k select-pane -U
+unbind Left
+bind-key -r h select-pane -L
+unbind Right
+bind-key -r l select-pane -R
+
+# Same as above except for resizing panes and not moving between them
+unbind M-down
+bind-key -r M-j resize-pane -D 5
+unbind M-Up
+bind-key -r M-k resize-pane -U 5
+unbind M-Left
+bind-key -r M-h resize-pane -L 5
+unbind M-Right
+bind-key -r M-l resize-pane -R 5
+
+# Turn off status bar
+set -g status off
+
+# Turn on window titles, so that it's titled `vim', `weechat', etc
+set -g set-titles on
+set -g set-titles-string '#W'
+set-window-option -g automatic-rename on
+    '';
+  };
 
   programs.neovim = {
     enable = true;
@@ -145,4 +213,11 @@ autocmd FileType purescript nnoremap <buffer> <silent> <leader>p :Pursuit<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>T :Ptype<CR>
     '';
   };
+
+  programs.starship = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  home.stateVersion = "19.03";
 }
