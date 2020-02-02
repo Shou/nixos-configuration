@@ -9,6 +9,11 @@ let
 
   nixos-hardware = import ./nixos-hardware.nix;
 
+  bluez52 = (import (fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/tarball/a83fa6410f8e2fd1a0ffdeb2d0304c6ad180fa03";
+    sha256 = "06zzlx968x6pmr05s3yabvvj25g5ibmzjj3accp09s6l320y07cy";
+  }) {}).bluez;
+
   pulseConfig = pkgs.writeText "default.pa" ''
     load-module module-device-restore
     load-module module-card-restore
@@ -96,14 +101,14 @@ in rec {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    tmux spotify paprefs pavucontrol hexchat bat ripgrep fd
+    paprefs pavucontrol hexchat bat ripgrep fd
     mpv smplayer docker chrome-gnome-shell fish nix-index docker_compose git
     noto-fonts-emoji emojione xsel bazel gnumake imagemagick curl direnv
     stack xvfb_run jq pcre kdiff3 postgresql_10 poppler_utils xmlstarlet
-    libssh2 libxml2 tree gcc binutils autoconf automake gparted alacritty
+    libssh2 libxml2 tree gcc binutils autoconf automake gparted
     haskellPackages.ghcid hlint gimp chromium ghc flatpak
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
-    google-chrome gnome3.dconf-editor
+    gnome3.dconf-editor p7zip zip unzip pciutils usbutils
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -114,7 +119,6 @@ in rec {
 
   # List services that you want to enable:
   services.gnome3.chrome-gnome-shell.enable = lib.mkDefault true;
-  #services.xserver.displayManager.gdm.autoLogin.user = lib.mkDefault "benedict";
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -166,9 +170,9 @@ in rec {
   };
 
   # Enable sound.
-  sound.enable = lib.mkDefault true;
+  sound.enable = true;
   hardware.pulseaudio = {
-    enable = lib.mkDefault true;
+    enable = true;
     zeroconf = {
       publish.enable = lib.mkDefault false;
       discovery.enable = lib.mkDefault false;
@@ -176,49 +180,51 @@ in rec {
     tcp.anonymousClients.allowAll = lib.mkDefault false;
 
     # Full Pulseaudio for Bluetooth support.
-    package = lib.mkDefault pkgs.pulseaudioFull;
+    package = pkgs.pulseaudioFull;
 
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
     # This seems to fix popping audio
-    configFile = pkgs.runCommand "default.pa" {} ''
-      sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
-        ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
-    '';
+    # THIS breaks Bluetooth in 19.09 wtf???
+    # if it's still an issue retrofit it by looking at the output
+    #configFile = pkgs.runCommand "default.pa" {} ''
+    #  sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
+    #    ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+    #'';
 
     # Steam games
-    support32Bit = lib.mkDefault true;
+    support32Bit = true;
   };
 
   hardware.opengl.driSupport32Bit = lib.mkDefault true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
 
-  hardware.bluetooth.enable = lib.mkDefault true;
+  hardware.bluetooth = {
+    enable = true;
 
-  # Enable A2DP sink.
-  hardware.bluetooth.extraConfig = lib.mkDefault "
-    [General]
-    Enable=Source,Sink,Media,Socket
-  ";
+    package = bluez52;
+
+    # Enable A2DP sink.
+    # is this still relevant in 19.09???
+    extraConfig = ''
+      [General]
+      Enable=Source,Sink,Media,Socket
+    '';
+  };
 
   services.xserver = {
-    enable = lib.mkDefault true;
-    layout = lib.mkDefault "us";
+    enable = true;
+    layout = "us";
     libinput = {
-      enable = lib.mkDefault true;
-      tapping = lib.mkDefault true;
+      enable = true;
+      tapping = true;
     };
     desktopManager = {
-      gnome3.enable = lib.mkDefault true;
+      gnome3.enable = true;
     };
     displayManager = {
-      job.preStart = lib.mkDefault (pkgs.lib.optionalString config.hardware.pulseaudio.enable ''
-        mkdir -p /run/gdm/.config/pulse
-        ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
-        chown -R gdm:gdm /run/gdm/.config
-      '');
       gdm = {
-        enable = lib.mkDefault true;
+        enable = true;
         wayland = lib.mkDefault false;
 
         autoLogin = {
@@ -236,13 +242,13 @@ in rec {
       benedict = {
         isNormalUser = lib.mkDefault true;
         uid = lib.mkDefault 1000;
-        extraGroups = [ "sudo" "docker" "networkmanager" "libvirtd" "kvm" "qemu" ];
+        extraGroups = [ "wheel" "docker" "networkmanager" "libvirtd" "kvm" "qemu" ];
         shell = pkgs.fish;
       };
       work = {
         isNormalUser = lib.mkDefault true;
         uid = lib.mkDefault 1001;
-        extraGroups = [ "sudo" "docker" ];
+        extraGroups = [ "wheel" "docker" "networkmanager" ];
         shell = pkgs.fish;
       };
     };
@@ -251,27 +257,19 @@ in rec {
     };
   };
 
-  # Set up sudoers group
-  security.sudo.configFile = lib.mkDefault ''%sudo ALL=(ALL) ALL'';
-
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = lib.mkDefault "19.09"; # Did you read the comment? no lol
-  system.autoUpgrade.channel = lib.mkDefault "https://nixos.org/channels/nixos-20.03/";
+  system.stateVersion = "19.09"; # Did you read the comment? no lol
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-20.03/";
 
   # Satisfy Elasticsearch requirement
   boot.kernel.sysctl = {
-    "vm.max_map_count" = lib.mkDefault 262144;
+    "vm.max_map_count" = 262144;
   };
 
-  ### Virtualisation
-
-  # Attach GPU to VFIO driver -- this is for a GTX 1060
-  boot.extraModprobeConfig = lib.mkDefault "options vfio-pci ids=10de:1c03,10de:10f1";
-
-  systemd.extraConfig = lib.mkDefault ''
+  systemd.extraConfig = ''
     LimitNOFILE=65536
     DefaultLimitNOFILE=65536
     LimitMEMLOCK=infinity

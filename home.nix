@@ -4,7 +4,7 @@
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    firefox-bin google-chrome
+    firefox-bin google-chrome spotify
   ]);
 
   programs.fish = {
@@ -259,5 +259,13 @@ syntax keyword jsBooleanFalse false conceal cchar=👎
     "org/gnome/terminal/legacy".default-show-menubar = false;
   };
 
-  home.stateVersion = "19.03";
+  # Enable Bluetooth media controls through Mpris
+  systemd.user.services.mpris-proxy = {
+    Unit.Description = "Mpris proxy";
+    Unit.After = [ "network.target" "sound.target" ];
+    Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+    Install.WantedBy = [ "default.target" ];
+  };
+
+  home.stateVersion = "19.09";
 }
