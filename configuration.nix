@@ -9,10 +9,10 @@ let
 
   nixos-hardware = import ./nixos-hardware.nix;
 
-  bluez52 = (import (fetchTarball {
+  nixpkgs2019-12-09 = import (fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/tarball/a83fa6410f8e2fd1a0ffdeb2d0304c6ad180fa03";
     sha256 = "06zzlx968x6pmr05s3yabvvj25g5ibmzjj3accp09s6l320y07cy";
-  }) {}).bluez;
+  }) {};
 
   pulseConfig = pkgs.writeText "default.pa" ''
     load-module module-device-restore
@@ -180,7 +180,7 @@ in rec {
     tcp.anonymousClients.allowAll = lib.mkDefault false;
 
     # Full Pulseaudio for Bluetooth support.
-    package = pkgs.pulseaudioFull;
+    package = nixpkgs2019-12-09.pulseaudioFull;
 
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
@@ -202,7 +202,7 @@ in rec {
   hardware.bluetooth = {
     enable = true;
 
-    package = bluez52;
+    package = nixpkgs2019-12-09.bluez;
 
     # Enable A2DP sink.
     # is this still relevant in 19.09???
