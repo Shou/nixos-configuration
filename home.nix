@@ -4,7 +4,7 @@
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    firefox-bin google-chrome spotify
+    firefox-bin google-chrome spotify hexchat
   ]);
 
   programs.fish = {
@@ -16,7 +16,11 @@
     '';
   };
 
-  programs.direnv.enableFishIntegration = true;
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    enableFishIntegration = true;
+  };
 
   programs.starship = {
     enable = true;
@@ -35,6 +39,11 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
+    userName = "Benedict Aas";
+
+    aliases = {
+      diff = "diff --word-diff";
+    };
   };
 
   programs.tmux = {
@@ -257,6 +266,21 @@ syntax keyword jsBooleanFalse false conceal cchar=👎
     # There is an option under packages.gnome-terminal.showMenubar for
     # this but it doesn't work????
     "org/gnome/terminal/legacy".default-show-menubar = false;
+  };
+
+  gtk = {
+    enable = true;
+    iconTheme = {
+      name = "Adwaita";
+      package = pkgs.gnome3.adwaita-icon-theme;
+    };
+    theme = {
+      name = "Adwaita-dark";
+    };
+  };
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
   };
 
   # Enable Bluetooth media controls through Mpris
