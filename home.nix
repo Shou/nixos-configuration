@@ -16,6 +16,12 @@
     '';
   };
 
+  programs.bash = {
+    enable = true;
+    # :trollface:
+    initExtra = "exec fish";
+  };
+
   programs.direnv = {
     enable = true;
     enableBashIntegration = true;
