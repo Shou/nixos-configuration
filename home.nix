@@ -19,7 +19,12 @@
   programs.bash = {
     enable = true;
     # :trollface:
-    initExtra = "exec fish";
+    initExtra =
+      let fish = "${pkgs.fish}/bin/fish";
+      in "exec env SHELL=${fish} ${fish}";
+    profileExtra = ''
+      . ~/.nix-profile/etc/profile.d/nix.sh
+    '';
   };
 
   programs.direnv = {
@@ -49,6 +54,22 @@
 
     aliases = {
       diff = "diff --word-diff";
+    };
+    extraConfig = {
+      merge = {
+        tool = "vimdiff";
+      };
+      mergetool = {
+        prompt = true;
+        vimdiff = {
+          cmd = ''
+            nvim -d ''$LOCAL ''$BASE ''$REMOTE ''$MERGED -c 'wincmd w' -c 'wincmd J'
+          '';
+        };
+      };
+      diff = {
+        tool = "vimdiff";
+      };
     };
   };
 
