@@ -33,13 +33,12 @@ in rec {
     allowUnfree = true;
 
     firefox = {
-      enableGoogleTalkPlugin = lib.mkDefault true;
       enableAdobeFlash = lib.mkDefault false;
       enableGnomeExtensions = lib.mkDefault true;
     };
 
     chromium = {
-      enablePepperFlash = false;
+      enablePepperFlash = lib.mkDefault false;
     };
   };
 
