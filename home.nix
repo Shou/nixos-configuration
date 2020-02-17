@@ -4,7 +4,7 @@
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    firefox-bin google-chrome spotify hexchat
+    firefox-bin google-chrome spotify hexchat xsel
   ]);
 
   programs.fish = {
