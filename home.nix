@@ -63,7 +63,7 @@
         prompt = true;
         vimdiff = {
           cmd = ''
-            nvim -d ''$LOCAL ''$BASE ''$REMOTE ''$MERGED -c 'wincmd w' -c 'wincmd J'
+            nvim -d ''$LOCAL ''$MERGED ''$BASE ''$REMOTE -c 'wincmd w' -c 'wincmd J'
           '';
         };
       };
