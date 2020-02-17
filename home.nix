@@ -132,6 +132,8 @@ set-window-option -g automatic-rename on
       typescript-vim
       vim-signify
       fzf-vim
+      vim-jsx-pretty
+      yats-vim
     ]);
 
     extraConfig =
