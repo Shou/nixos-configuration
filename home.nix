@@ -4,7 +4,7 @@
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    firefox-bin google-chrome spotify hexchat xsel
+    google-chrome spotify hexchat xsel
   ]);
 
   programs.fish = {
@@ -82,6 +82,11 @@
     extraConfig = ''
 # mouse support
 set -g mouse on
+
+# split vertically
+bind-key | split-window -h
+# split horizontally
+bind-key - split-window -v
 
 # make it hjkl instead of left,down,up,right to switch between split panes
 unbind Down
