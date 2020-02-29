@@ -281,7 +281,9 @@ syntax keyword jsBooleanFalse false conceal cchar=👎
     "org/gnome/mutter/keybindings" = {
       "toggle-tiled-left" = ["<Super>comma"];
       "toggle-tiled-right" = ["<Super>period"];
+      "switch-monitor" = [];
     };
+    "org/gnome/settings-daemon/plugins/media-keys".video-out = [];
 
     "org/gnome/shell/app-switcher" = {
       "current-workspace-only" = true;

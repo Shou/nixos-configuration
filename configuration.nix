@@ -108,6 +108,8 @@ in rec {
     haskellPackages.ghcid hlint gimp chromium ghc flatpak
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
     gnome3.dconf-editor gnome3.gnome-tweaks p7zip zip unzip pciutils usbutils
+    wineWowPackages.staging
+    (winetricks.override { wine = wineWowPackages.staging; })
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
