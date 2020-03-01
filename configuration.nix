@@ -79,6 +79,7 @@ in rec {
       ibus.engines = with pkgs.ibus-engines; [
         uniemoji
         mozc
+        typing-booster
       ];
     };
   };
