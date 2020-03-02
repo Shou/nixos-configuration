@@ -27,7 +27,15 @@ let
     load-module module-position-event-sounds
   '';
 
-  dds-thumbnailer = import ./pkgs/dds-thumbnailer { inherit pkgs; };
+  mkThumbnailer = import ./lib/mkThumbnailer.nix { inherit pkgs; };
+  dds-thumbnailer = mkThumbnailer
+    "dds-thumbnailer"
+    "${pkgs.imagemagick}/bin/convert -thumbnail x%s %i png:%o"
+    "image/x-dds;";
+  webp-thumbnailer = mkThumbnailer
+    "webp-thumbnailer"
+    "${pkgs.libwebp}/bin/dwebp %i -scale %s %s -o %o"
+    "image/x-webp;image/webp;";
 
 in rec {
   nixpkgs.config = {
