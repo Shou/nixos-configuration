@@ -302,6 +302,9 @@ syntax keyword jsBooleanFalse false conceal cchar=👎
     # There is an option under packages.gnome-terminal.showMenubar for
     # this but it doesn't work????
     "org/gnome/terminal/legacy".default-show-menubar = false;
+
+    # beeg thumbnail limit (30MB)
+    "org/gnome/nautilus/preferences".thumbnail-limit = ''"30000000"'';
   };
 
   gtk = {
