@@ -27,6 +27,8 @@ let
     load-module module-position-event-sounds
   '';
 
+  dds-thumbnailer = import ./pkgs/dds-thumbnailer { inherit pkgs; };
+
 in rec {
   nixpkgs.config = {
     # Disappoint Stallman
@@ -111,6 +113,7 @@ in rec {
     gnome3.dconf-editor gnome3.gnome-tweaks p7zip zip unzip pciutils usbutils
     wineWowPackages.staging
     (winetricks.override { wine = wineWowPackages.staging; })
+    dds-thumbnailer
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -205,13 +208,6 @@ in rec {
     enable = true;
 
     package = nixpkgs2019-12-09.bluez;
-
-    # Enable A2DP sink.
-    # is this still relevant in 19.09???
-    extraConfig = ''
-      [General]
-      Enable=Source,Sink,Media,Socket
-    '';
   };
 
   services.xserver = {
