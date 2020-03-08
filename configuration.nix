@@ -36,6 +36,10 @@ let
     "webp-thumbnailer"
     "${pkgs.libwebp}/bin/dwebp %i -scale %s %s -o %o"
     "image/x-webp;image/webp;";
+  swf-thumbnailer = mkThumbnailer
+    "swf-thumbnailer"
+    "${pkgs.xvfb_run}/bin/xvfb-run ${pkgs.gnash}/bin/gnash -1 -r 1 --screenshot-file %o --screenshot 1 --max-advances 1 -t 1 -j %s -k %s %i"
+    "application/x-shockwave-flash;application/x-shockwave-flash2-preview;application/futuresplash;image/vnd.rn-realflash;";
 
 in rec {
   nixpkgs.config = {
@@ -121,7 +125,8 @@ in rec {
     gnome3.dconf-editor gnome3.gnome-tweaks p7zip zip unzip pciutils usbutils
     wineWowPackages.staging
     (winetricks.override { wine = wineWowPackages.staging; })
-    dds-thumbnailer
+    dds-thumbnailer webp-thumbnailer # swf-thumbnailer # doesn't work yet :(
+    gnash
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
