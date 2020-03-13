@@ -112,6 +112,16 @@ in rec {
   # Set your time zone.
   time.timeZone = lib.mkDefault "Europe/London";
 
+  environment = {
+    # HiDPI fixes
+    variables = {
+      GDK_SCALE = "2";
+      GDK_DPI_SCALE = "0.5";
+      XCURSOR_SIZE = "64";
+      QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    };
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -126,7 +136,6 @@ in rec {
     wineWowPackages.staging
     (winetricks.override { wine = wineWowPackages.staging; })
     dds-thumbnailer webp-thumbnailer # swf-thumbnailer # doesn't work yet :(
-    gnash
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
