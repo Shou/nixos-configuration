@@ -69,6 +69,9 @@ in rec {
     "https://all-hies.cachix.org"
   ];
 
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 7d";
+
   networking = {
     hostName = lib.mkDefault "shou";
     networkmanager.enable = lib.mkDefault true;
