@@ -134,6 +134,7 @@ set-window-option -g automatic-rename on
       psc-ide-vim
       vim-nix
       dhall-vim
+      typescript-vim
       vim-signify
       fzf-vim
       vim-jsx-pretty
