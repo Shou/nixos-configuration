@@ -122,6 +122,7 @@ in rec {
       GDK_DPI_SCALE = "0.5";
       XCURSOR_SIZE = "64";
       QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+      MOZ_USE_XINPUT2 = "1";
     };
   };
 
