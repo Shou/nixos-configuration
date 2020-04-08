@@ -118,12 +118,14 @@ in rec {
   environment = {
     # HiDPI fixes
     variables = {
-      GDK_SCALE = "2";
-      GDK_DPI_SCALE = "0.5";
-      XCURSOR_SIZE = "64";
       QT_AUTO_SCREEN_SCALE_FACTOR = "1";
       MOZ_USE_XINPUT2 = "1";
+      QT_SCALE_FACTOR = "2.5";
     };
+
+    gnome3.excludePackages = with pkgs.gnome3; [
+      gnome-software
+    ];
   };
 
   # List packages installed in system profile. To search, run:
