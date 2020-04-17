@@ -301,4 +301,21 @@ in rec {
     LimitMEMLOCK=infinity
     DefaultLimitMEMLOCK=infinity
   '';
+
+  boot.initrd = {
+    availableKernelModules = [ "virtio-pci" ];
+    network = {
+      enable = true;
+      ssh = {
+        enable = true;
+        port = 2222;
+        hostECDSAKey = null; # TODO
+        authorizedKeys = []; # TODO
+      };
+      # NOTE We don't have to retrofit this for Fish?
+      postCommands = ''
+        echo 'cryptsetup-askpass' >> /root/.profile
+      '';
+    };
+  };
 }
