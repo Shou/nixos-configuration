@@ -15,7 +15,7 @@ in {
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    google-chrome spotify hexchat xsel firefox-bin killall pulseeffect
+    google-chrome spotify hexchat xsel firefox-bin killall pulseeffects
   ]);
 
   xdg.mimeApps = {
