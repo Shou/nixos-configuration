@@ -1,11 +1,44 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
-{
+let
+  # :: { app :: Package, mimetypes: [String] } -> Map String Package
+  mkMimeTypeAssocs = ps:
+    let
+      # :: Package -> String
+      desktoper = p: "${p}/share/applications/firefox.desktop";
+      # :: Package -> [String] -> Map String Program
+      mkMimeTypeAssoc = p: ms:
+        lib.foldl' (acc: k: lib.mergeAttrs acc { "${k}" = desktoper p; }) {} ms;
+    in builtins.foldl' (acc: p: lib.mergeAttrs acc (mkMimeTypeAssoc p.app p.mimetypes)) {} ps;
+
+in {
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    google-chrome spotify hexchat xsel pulseeffects
+    google-chrome spotify hexchat xsel firefox-bin killall pulseeffect
   ]);
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = mkMimeTypeAssocs [
+      {
+        app = pkgs.firefox-bin;
+        mimetypes = [
+          "x-scheme-handler/http"
+          "x-scheme-handler/https"
+          "x-scheme-handler/ftp"
+          "x-scheme-handler/chrome"
+          "text/html"
+          "application/x-extension-htm"
+          "application/x-extension-html"
+          "application/x-extension-shtml"
+          "application/xhtml+xml"
+          "application/x-extension-xhtml"
+          "application/x-extension-xht"
+        ];
+      }
+    ];
+  };
 
   programs.fish = {
     enable = true;
@@ -196,7 +229,8 @@ let mapleader = ' '
 set showcmd
 
 " Highlight current row and column
-set cursorline cursorcolumn
+set cursorline
+set cursorcolumn
 
 " Highlight unwanted spaces (trailing spaces)
 highlight ExtraWhitespace ctermbg=lightred guibg=lightred
