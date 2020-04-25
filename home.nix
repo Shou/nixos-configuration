@@ -176,20 +176,7 @@ set-window-option -g automatic-rename on
       tsuquyomi
     ]);
 
-    extraConfig =
-      let
-        loadPlugin = plugin: ''
-            set rtp^=${plugin.rtp}
-            set rtp+=${plugin.rtp}/after
-          '';
-
-      in ''
-" https://github.com/NixOS/nixpkgs/issues/39364#issuecomment-425536054
-filetype off | syn off
-${builtins.concatStringsSep "\n" (map loadPlugin plugins)}
-filetype indent plugin on | syn on
-set shell=/bin/sh
-
+    extraConfig = ''
 syntax on
 " Keep ExtraWhitespace highlight groups
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
@@ -262,7 +249,7 @@ autocmd FileType purescript nnoremap <buffer> <silent> <leader>g :Pgoto<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>p :Pursuit<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>T :Ptype<CR>
 
-" Javascript syntax config
+" Javascript syntax config -- this isn't really used but i'm keeping it here for posterity
 let g:javascript_conceal_function = "🔪"
 let g:javascript_conceal_null = "🍩"
 let g:javascript_conceal_this = "🤳"
