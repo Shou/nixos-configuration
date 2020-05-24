@@ -120,7 +120,7 @@ in rec {
     variables = {
       QT_AUTO_SCREEN_SCALE_FACTOR = "1";
       MOZ_USE_XINPUT2 = "1";
-      QT_SCALE_FACTOR = "2.5";
+      QT_SCALE_FACTOR = "1.5";
     };
 
     gnome3.excludePackages = with pkgs.gnome3; [
