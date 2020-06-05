@@ -4,7 +4,7 @@
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    google-chrome spotify hexchat xsel pulseeffect
+    google-chrome spotify hexchat xsel pulseeffects
   ]);
 
   programs.fish = {

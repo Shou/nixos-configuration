@@ -229,6 +229,9 @@ in rec {
     support32Bit = true;
   };
 
+  # Buttery savings
+  powerManagement.powertop.enable = true;
+
   hardware.opengl.driSupport32Bit = lib.mkDefault true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
 
