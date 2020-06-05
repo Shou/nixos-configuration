@@ -138,10 +138,7 @@ in rec {
     libssh2 libxml2 tree gcc binutils autoconf automake gparted
     haskellPackages.ghcid hlint gimp chromium ghc flatpak
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
-    gnome3.dconf-editor gnome3.gnome-tweaks
-    p7zip zip unzip pciutils usbutils unar unrar
-    wineWowPackages.staging
-    (winetricks.override { wine = wineWowPackages.staging; })
+    gnome3.dconf-editor gnome3.gnome-tweaks p7zip zip unzip pciutils usbutils
     dds-thumbnailer webp-thumbnailer # swf-thumbnailer # doesn't work yet :(
   ];
 

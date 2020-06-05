@@ -15,7 +15,8 @@ in {
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    google-chrome spotify hexchat xsel firefox-bin killall pulseeffects
+    google-chrome spotify hexchat xsel firefox-bin killall pulseeffects aseprite
+    lutris vulkan-tools
   ]);
 
   xdg.mimeApps = {
@@ -47,6 +48,10 @@ in {
       set -gx PATH ~/.npm-packages/bin $PATH
       set -gx EDITOR nvim
     '';
+
+    shellAliases = {
+      tmux = "direnv exec / tmux";
+    };
   };
 
   programs.bash = {
