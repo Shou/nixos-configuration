@@ -16,7 +16,7 @@ in {
 
   home.packages = (with pkgs; [
     google-chrome spotify hexchat xsel firefox-bin killall pulseeffects aseprite
-    lutris vulkan-tools
+    lutris vulkan-tools steam
   ]);
 
   xdg.mimeApps = {
