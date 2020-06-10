@@ -52,6 +52,12 @@ in {
     shellAliases = {
       tmux = "direnv exec / tmux";
     };
+
+    functions = {
+      nixcmd = {
+        body = ''nix run nixpkgs."$argv[1]" -c $argv[1..-1]'';
+      };
+    };
   };
 
   programs.bash = {
