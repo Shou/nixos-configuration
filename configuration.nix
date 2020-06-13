@@ -78,7 +78,7 @@ in rec {
     firewall.enable = lib.mkDefault false;
   };
 
-  services.dnscrypt-proxy = {
+  services.dnscrypt-proxy2 = {
     enable = lib.mkDefault false;
   };
 
@@ -295,6 +295,7 @@ in rec {
   boot.kernel.sysctl = {
     "vm.max_map_count" = 262144;
   };
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   systemd.extraConfig = ''
     LimitNOFILE=65536
