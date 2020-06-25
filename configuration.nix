@@ -69,7 +69,7 @@ in rec {
     "https://all-hies.cachix.org"
   ];
 
-  nix.gc.automatic = true;
+  nix.gc.automatic = false;
   nix.gc.options = "--delete-older-than 7d";
 
   networking = {
@@ -292,10 +292,21 @@ in rec {
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-20.03/";
 
   # Satisfy Elasticsearch requirement
-  boot.kernel.sysctl = {
-    "vm.max_map_count" = 262144;
+  boot = {
+    kernel.sysctl = {
+      "vm.max_map_count" = 262144;
+    };
+    kernelPackages = pkgs.linuxPackages_5_4;
+    kernelPatches = [
+      {
+        name = "drm-i915-fast-narrow-link";
+        patch = ./0001-drm-i915-Try-to-use-fast-narrow-link-on-eDP-again-an_5.4.x.patch;
+      }
+    ];
   };
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # speedz
+  # boot.grub.loader.timeout = 1;
 
   systemd.extraConfig = ''
     LimitNOFILE=65536
