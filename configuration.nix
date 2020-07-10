@@ -78,10 +78,6 @@ in rec {
     firewall.enable = lib.mkDefault false;
   };
 
-  services.dnscrypt-proxy2 = {
-    enable = lib.mkDefault false;
-  };
-
   # Configure network proxy if necessary
   # networking.proxy.default = lib.mkDefault "http://user:password@proxy:port/";
   # networking.proxy.noProxy = lib.mkDefault "127.0.0.1,localhost,internal.domain";
@@ -211,7 +207,7 @@ in rec {
     tcp.anonymousClients.allowAll = lib.mkDefault false;
 
     # Full Pulseaudio for Bluetooth support.
-    package = nixpkgs2019-12-09.pulseaudioFull;
+    package = pkgs.pulseaudioFull;
 
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
@@ -236,7 +232,7 @@ in rec {
   hardware.bluetooth = {
     enable = true;
 
-    package = nixpkgs2019-12-09.bluez;
+    package = pkgs.bluez;
   };
 
   services.xserver = {
@@ -296,8 +292,8 @@ in rec {
     kernel.sysctl = {
       "vm.max_map_count" = 262144;
     };
-    kernelPackages = pkgs.linuxPackages_5_4;
-    kernelPatches = [
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    kernelPatches = lib.const [] [
       {
         name = "drm-i915-fast-narrow-link";
         patch = ./0001-drm-i915-Try-to-use-fast-narrow-link-on-eDP-again-an_5.4.x.patch;
