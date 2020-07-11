@@ -15,12 +15,12 @@ in {
   programs.home-manager.enable = true;
 
   home.packages = (with pkgs; [
-    google-chrome spotify hexchat xsel firefox-bin killall pulseeffects aseprite
+    google-chrome spotify hexchat xsel firefox-bin killall pulseeffects
     lutris vulkan-tools steam
   ]);
 
   xdg.mimeApps = {
-    enable = true;
+    enable = false; # TODO this doesn't work :(
     defaultApplications = mkMimeTypeAssocs [
       {
         app = pkgs.firefox-bin;
