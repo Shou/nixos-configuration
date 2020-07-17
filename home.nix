@@ -62,7 +62,8 @@ in {
   };
 
   programs.bash = {
-    enable = true;
+    # TODO disable this except on peril
+    enable = lib.mkDefault true;
     # :trollface:
     initExtra =
       let fish = "${pkgs.fish}/bin/fish";
