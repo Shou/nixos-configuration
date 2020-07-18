@@ -7,26 +7,7 @@
 let
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
 
-  nixos-hardware = import ./nixos-hardware.nix;
-
-  nixpkgs2019-12-09 = import (fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/tarball/a83fa6410f8e2fd1a0ffdeb2d0304c6ad180fa03";
-    sha256 = "06zzlx968x6pmr05s3yabvvj25g5ibmzjj3accp09s6l320y07cy";
-  }) {};
-
-  pulseConfig = pkgs.writeText "default.pa" ''
-    load-module module-device-restore
-    load-module module-card-restore
-    load-module module-udev-detect
-    load-module module-native-protocol-unix
-    load-module module-default-device-restore
-    load-module module-rescue-streams
-    load-module module-always-sink
-    load-module module-intended-roles
-    load-module module-suspend-on-idle
-    load-module module-position-event-sounds
-  '';
-
+  # TODO probably move all of these to mkThumbnailer.nix or rename file to thumbnailer.nix
   mkThumbnailer = import ./lib/mkThumbnailer.nix { inherit pkgs; };
   dds-thumbnailer = mkThumbnailer
     "dds-thumbnailer"
@@ -36,6 +17,7 @@ let
     "webp-thumbnailer"
     "${pkgs.libwebp}/bin/dwebp %i -scale %s %s -o %o"
     "image/x-webp;image/webp;";
+  # this dont work (yet?)
   swf-thumbnailer = mkThumbnailer
     "swf-thumbnailer"
     "${pkgs.xvfb_run}/bin/xvfb-run ${pkgs.gnash}/bin/gnash -1 -r 1 --screenshot-file %o --screenshot 1 --max-advances 1 -t 1 -j %s -k %s %i"
@@ -78,14 +60,8 @@ in rec {
     firewall.enable = lib.mkDefault false;
   };
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = lib.mkDefault "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = lib.mkDefault "127.0.0.1,localhost,internal.domain";
-
   # Select internationalisation properties.
   i18n = {
-  #   consoleKeyMap = lib.mkDefault "us";
-  #   defaultLocale = lib.mkDefault "en_US.UTF-8";
     inputMethod = {
       enabled = lib.mkDefault "ibus";
       ibus.engines = with pkgs.ibus-engines; [
@@ -126,7 +102,7 @@ in rec {
   };
 
   # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # $ nix search wget (or nix repl '<nixpkgs>' and use tab-complete)
   environment.systemPackages = with pkgs; [
     paprefs pavucontrol hexchat bat ripgrep fd
     mpv smplayer docker chrome-gnome-shell fish nix-index docker_compose git
@@ -181,12 +157,6 @@ in rec {
 
   # Enable Docker daemon.
   virtualisation.docker.enable = lib.mkDefault true;
-  virtualisation.virtualbox.host.enable = lib.mkDefault false;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
 
   # Enable CUPS to print documents.
   services.printing = {
@@ -224,15 +194,11 @@ in rec {
     support32Bit = true;
   };
 
-  # Buttery savings
-  powerManagement.powertop.enable = true;
-
   hardware.opengl.driSupport32Bit = lib.mkDefault true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
 
   hardware.bluetooth = {
     enable = true;
-
     package = pkgs.bluez;
   };
 
@@ -294,13 +260,10 @@ in rec {
       "vm.max_map_count" = 262144;
     };
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-    kernelParams = [
-      "libata.force=noncq"
-    ];
   };
 
   # speedz
-  # boot.grub.loader.timeout = 1;
+  boot.loader.timeout = 2;
 
   systemd.extraConfig = ''
     LimitNOFILE=65536

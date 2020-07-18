@@ -25,6 +25,9 @@ rec {
     "xn--9q8h"
   ];
 
+  # Buttery savings
+  powerManagement.powertop.enable = true;
+
   boot = {
     kernelPackages = pkgs.linuxPackages_4_19;
     # idk let's try it without patches??
