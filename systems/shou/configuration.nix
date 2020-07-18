@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 rec {
   imports = [
@@ -24,4 +24,18 @@ rec {
     "localhost"
     "xn--9q8h"
   ];
+
+  boot = {
+    kernelPackages = pkgs.linuxPackages_4_19;
+    # idk let's try it without patches??
+    kernelPatches = lib.const [] [
+      {
+        name = "drm-i915-fast-narrow-link";
+        patch = ./0001-drm-i915-Try-to-use-fast-narrow-link-on-eDP-again-an_5.4.x.patch;
+      }
+    ];
+    kernelParams = [
+      "libata.force=noncq"
+    ];
+  };
 }

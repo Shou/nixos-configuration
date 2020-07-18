@@ -294,12 +294,6 @@ in rec {
       "vm.max_map_count" = 262144;
     };
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-    kernelPatches = lib.const [] [
-      {
-        name = "drm-i915-fast-narrow-link";
-        patch = ./0001-drm-i915-Try-to-use-fast-narrow-link-on-eDP-again-an_5.4.x.patch;
-      }
-    ];
     kernelParams = [
       "libata.force=noncq"
     ];
