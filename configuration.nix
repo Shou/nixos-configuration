@@ -262,6 +262,11 @@ in rec {
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
   };
 
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 3;
+  };
+
   # speedz
   boot.loader.timeout = 2;
 
