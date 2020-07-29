@@ -5,7 +5,7 @@
 { config, lib, pkgs, ... }:
 
 
-rec {
+{
   imports = [
     ./hardware-configuration.nix
     ./hardware-personal.nix

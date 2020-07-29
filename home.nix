@@ -51,7 +51,7 @@ in {
 
     shellAliases = {
       tmux = "direnv exec / tmux";
-      ls = "ls -hrt";
+      ls = "ls -hrt --color=always";
     };
 
     functions = {

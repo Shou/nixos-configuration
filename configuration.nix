@@ -226,6 +226,9 @@ in rec {
     };
   };
 
+  # Enable Digimend (for Huion tablet support)
+  services.xserver.digimend.enable = true;
+
   # Define user accounts
   users = {
     users = {
