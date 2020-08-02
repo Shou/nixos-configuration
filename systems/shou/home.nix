@@ -8,6 +8,6 @@ rec {
   programs.bash.enable = false;
 
   home.packages = with pkgs; [
-    discord
+    discord krita
   ];
 }
