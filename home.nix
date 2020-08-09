@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ ... }:
 
 let
   # :: { app :: Package, mimetypes: [String] } -> Map String Package
@@ -10,6 +10,9 @@ let
       mkMimeTypeAssoc = p: ms:
         lib.foldl' (acc: k: lib.mergeAttrs acc { "${k}" = desktoper p; }) {} ms;
     in builtins.foldl' (acc: p: lib.mergeAttrs acc (mkMimeTypeAssoc p.app p.mimetypes)) {} ps;
+
+    pkgs = import ./pin/nixos-20.03.nix;
+    lib = pkgs.lib;
 
 in {
   programs.home-manager.enable = true;
