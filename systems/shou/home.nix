@@ -1,6 +1,10 @@
-{ pkgs, ... }:
+{ ... }:
 
-rec {
+let
+  pkgs = import ../../pin/nixos-20.03.nix;
+  unstable = import ../../pin/nixos-unstable.nix;
+
+in {
   imports = [
     ./../../home.nix
   ];
@@ -8,6 +12,6 @@ rec {
   programs.bash.enable = false;
 
   home.packages = with pkgs; [
-    discord krita
+    unstable.discord krita steam
   ];
 }

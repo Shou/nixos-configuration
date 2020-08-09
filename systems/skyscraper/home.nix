@@ -9,6 +9,6 @@ in {
   ];
 
   home.packages = with pkgs; [
-    discord qbittorrent
+    unstable.discord qbittorrent steam
   ];
 }
