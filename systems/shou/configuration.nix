@@ -1,6 +1,9 @@
 { pkgs, lib, ... }:
 
-rec {
+let
+  unstable = import ../../pin/nixos-unstable.nix;
+
+in {
   imports = [
     # "${config}/configuration.nix"
     ../../configuration.nix
@@ -29,8 +32,9 @@ rec {
   powerManagement.powertop.enable = true;
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_4_19;
-    # idk let's try it without patches??
+    # kernelPackages = pkgs.linuxPackages_4_19;
+    kernelPackages = unstable.linuxPackages_5_7;
+    # idk let's try it without patches?? (this only applies to 5.2+ kernels)
     kernelPatches = lib.const [] [
       {
         name = "drm-i915-fast-narrow-link";
@@ -39,6 +43,11 @@ rec {
     ];
     kernelParams = [
       "libata.force=noncq"
+      "i915.enable_psr=0"
+      "i915.enable_dc=-1"
+      "i915.enable_fbc=0"
+      "i915.fastboot=1"
+      "i915.edp_vswing=2"
     ];
   };
 }
