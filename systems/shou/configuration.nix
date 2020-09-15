@@ -28,6 +28,12 @@ in {
     "xn--9q8h"
   ];
 
+  services.synergy.client = {
+    enable = true;
+    screenName = "shou";
+    serverAddress = "10.0.0.41";
+  };
+
   # Buttery savings
   powerManagement.powertop.enable = true;
 

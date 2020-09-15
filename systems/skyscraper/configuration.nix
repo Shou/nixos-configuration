@@ -35,6 +35,11 @@
 
   services.nginx.virtualHosts."localhost".root = "/home/benedict/Videos";
 
+  services.synergy.server = {
+    enable = true;
+    screenName = "skyscraper";
+  };
+
   ### Virtualisation
   boot.kernelModules = [
     "kvm-amd" "kvm-intel"
@@ -43,7 +48,7 @@
   ];
   # Enable IOMMU
   boot.kernelParams = [ "amd_iommu=on" ];
-  boot.kernelPackages = pkgs.linuxPackages_4_19;
+  # boot.kernelPackages = pkgs.linuxPackages_4_19;
   # Blacklist GPU drivers
   boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
 
