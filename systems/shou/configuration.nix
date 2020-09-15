@@ -29,7 +29,7 @@ in {
   ];
 
   services.synergy.client = {
-    enable = true;
+    enable = false;
     screenName = "shou";
     serverAddress = "10.0.0.13";
   };

@@ -36,7 +36,7 @@
   services.nginx.virtualHosts."localhost".root = "/home/benedict/Videos";
 
   services.synergy.server = {
-    enable = true;
+    enable = false;
     screenName = "skyscraper";
   };
 
