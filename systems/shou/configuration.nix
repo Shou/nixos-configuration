@@ -31,7 +31,7 @@ in {
   services.synergy.client = {
     enable = true;
     screenName = "shou";
-    serverAddress = "10.0.0.41";
+    serverAddress = "10.0.0.13";
   };
 
   # Buttery savings
