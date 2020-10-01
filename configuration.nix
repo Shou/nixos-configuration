@@ -235,7 +235,7 @@ in rec {
       benedict = {
         isNormalUser = lib.mkDefault true;
         uid = lib.mkDefault 1000;
-        extraGroups = [ "wheel" "docker" "networkmanager" "libvirtd" "kvm" "qemu" ];
+        extraGroups = [ "wheel" "docker" "networkmanager" "libvirtd" "kvm" "qemu" "input" ];
         shell = pkgs.fish;
       };
       work = {

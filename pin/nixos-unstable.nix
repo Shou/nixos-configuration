@@ -3,6 +3,6 @@ let
     allowUnfree = true;
   };
 
-in import (fetchTarball "https://github.com/NixOS/nixpkgs/tarball/32b46dd897ab2143a609988a04d87452f0bbef59") {
+in import (fetchTarball "https://github.com/NixOS/nixpkgs/tarball/1937fd3f1906e2c0909e889ddd31f2e77cbd8bfc") {
   inherit config;
 }
