@@ -4,8 +4,10 @@
 
 { config, lib, pkgs, ... }:
 
+let
+  kill-bluez = import ../../pkgs/kill-bluez { inherit pkgs; };
 
-{
+in {
   imports = [
     ./hardware-configuration.nix
     ./hardware-personal.nix
@@ -24,6 +26,7 @@
     wineWowPackages.staging
     (winetricks.override { wine = wineWowPackages.staging; })
     # (all-hies.selection { selector = p: { inherit (p) ghc882; }; })
+    kill-bluez
   ];
 
   users.users.andrea = {
@@ -39,6 +42,19 @@
     enable = false;
     screenName = "skyscraper";
   };
+
+  security.sudo.extraRules = [
+    {
+      users = [ "benedict" ];
+      groups = [];
+      commands = [
+        {
+          command = "${kill-bluez}/bin/kill-bluez";
+          options = [ "SETENV" "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   ### Virtualisation
   boot.kernelModules = [
