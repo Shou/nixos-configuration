@@ -11,7 +11,9 @@ let
         lib.foldl' (acc: k: lib.mergeAttrs acc { "${k}" = desktoper p; }) {} ms;
     in builtins.foldl' (acc: p: lib.mergeAttrs acc (mkMimeTypeAssoc p.app p.mimetypes)) {} ps;
 
-    pkgs = import ./pin/nixos-20.03.nix;
+    sources = import ./nix/sources.nix;
+    stable = import sources.nixpkgs {};
+    pkgs = import sources.unstable {};
     lib = pkgs.lib;
 
 in {
@@ -19,7 +21,6 @@ in {
 
   home.packages = (with pkgs; [
     google-chrome spotify hexchat xsel firefox-bin killall pulseeffects
-    lutris vulkan-tools
   ]);
 
   xdg.mimeApps = {
@@ -64,8 +65,8 @@ in {
   };
 
   programs.bash = {
-    # TODO disable this except on peril
-    enable = lib.mkDefault true;
+    # TODO enable this on peril
+    enable = lib.mkDefault false;
     # :trollface:
     initExtra =
       let fish = "${pkgs.fish}/bin/fish";
@@ -265,5 +266,5 @@ in {
     Install.WantedBy = [ "default.target" ];
   };
 
-  home.stateVersion = "19.09";
+  home.stateVersion = "20.03";
 }

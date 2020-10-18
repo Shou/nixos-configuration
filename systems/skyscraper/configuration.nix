@@ -5,6 +5,9 @@
 { config, lib, pkgs, ... }:
 
 let
+  sources = import ../../nix/sources.nix;
+  master = import sources.master {};
+
   kill-bluez = import ../../pkgs/kill-bluez { inherit pkgs; };
 
 in {
@@ -64,7 +67,7 @@ in {
   ];
   # Enable IOMMU
   boot.kernelParams = [ "amd_iommu=on" ];
-  # boot.kernelPackages = pkgs.linuxPackages_4_19;
+  boot.kernelPackages = master.linuxPackages_5_9;
   # Blacklist GPU drivers
   boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
 

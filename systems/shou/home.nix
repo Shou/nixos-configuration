@@ -1,8 +1,9 @@
 { ... }:
 
 let
-  pkgs = import ../../pin/nixos-20.03.nix;
-  unstable = import ../../pin/nixos-unstable.nix;
+  sources = import ../../nix/sources.nix;
+  pkgs = import sources.nixpkgs {};
+  unstable = import sources.unstable {};
 
 in {
   imports = [

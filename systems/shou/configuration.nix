@@ -1,7 +1,10 @@
 { pkgs, lib, ... }:
 
 let
-  unstable = import ../../pin/nixos-unstable.nix;
+  sources = import ../../nix/sources.nix;
+  # Maybe we _should_ consider using this one?
+  # pkgs = import sources.nixpkgs {};
+  unstable = import sources.unstable {};
 
 in {
   imports = [

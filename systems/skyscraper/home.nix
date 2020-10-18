@@ -1,8 +1,9 @@
 { ... }:
 
 let
-  pkgs = import ../../pin/nixos-20.03.nix;
-  unstable = import ../../pin/nixos-unstable.nix;
+  sources = import ../../nix/sources.nix;
+  stable = import sources.nixpkgs {};
+  pkgs = import sources.unstable {};
 
 in {
   imports = [
@@ -10,6 +11,6 @@ in {
   ];
 
   home.packages = with pkgs; [
-    unstable.discord qbittorrent steam
+    discord qbittorrent steam stable.mpv youtube-dl unar
   ];
 }

@@ -17,8 +17,6 @@ hi CursorColumn ctermbg=237
 
 filetype plugin indent on
 
-set foldenable foldmethod=indent
-
 " Autocomplete
 set omnifunc=syntaxcomplete#Complete
 
