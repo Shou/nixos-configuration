@@ -11,6 +11,7 @@ in {
   ];
 
   home.packages = with pkgs; [
-    discord qbittorrent steam stable.mpv youtube-dl unar
+    discord qbittorrent steam stable.mpv youtube-dl unar krita aseprite-unfree
+    etcher ffmpeg-full file pciutils usbutils cachix
   ];
 }
