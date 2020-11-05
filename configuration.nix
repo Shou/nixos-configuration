@@ -36,7 +36,7 @@ in rec {
     };
   };
 
-  nix.trustedUsers = lib.mkDefault [ "root" "benedict" "@sudo" ];
+  nix.trustedUsers = lib.mkDefault [ "root" "benedict" "@wheel" ];
 
   nix.nrBuildUsers = 128;
 

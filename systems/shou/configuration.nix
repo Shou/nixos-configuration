@@ -10,6 +10,7 @@ in {
   imports = [
     # "${config}/configuration.nix"
     ../../configuration.nix
+    # TODO move out from here and use a fetcher so we can hash it
     /home/work/Prog/Habito/monorepo/nix/nixos
     ./hardware-configuration.nix
     ./hardware-personal.nix
