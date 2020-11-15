@@ -19,13 +19,12 @@ in {
 
   nixpkgs.config = {
     firefox.enableAdobeFlash = true;
-    chromium.enablePepperFlash = true;
   };
 
   networking.hostName = "skyscraper";
 
   environment.systemPackages = with pkgs; [
-    p7zip zip unzip pciutils usbutils firefox chromium
+    p7zip zip unzip pciutils usbutils
     wineWowPackages.staging
     (winetricks.override { wine = wineWowPackages.staging; })
     # (all-hies.selection { selector = p: { inherit (p) ghc882; }; })

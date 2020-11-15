@@ -23,6 +23,8 @@ let
     "${pkgs.xvfb_run}/bin/xvfb-run ${pkgs.gnash}/bin/gnash -1 -r 1 --screenshot-file %o --screenshot 1 --max-advances 1 -t 1 -j %s -k %s %i"
     "application/x-shockwave-flash;application/x-shockwave-flash2-preview;application/futuresplash;image/vnd.rn-realflash;";
 
+  webp-pixbuf-loader = pkgs.callPackage ./pkgs/webp-pixbuf-loader { };
+
 in rec {
   nixpkgs.config = {
     # Disappoint Stallman
@@ -31,10 +33,6 @@ in rec {
     firefox = {
       enableAdobeFlash = lib.mkDefault false;
       enableGnomeExtensions = lib.mkDefault true;
-    };
-
-    chromium = {
-      enablePepperFlash = lib.mkDefault false;
     };
   };
 
@@ -105,11 +103,11 @@ in rec {
   # $ nix search wget (or nix repl '<nixpkgs>' and use tab-complete)
   environment.systemPackages = with pkgs; [
     paprefs pavucontrol hexchat bat ripgrep fd
-    mpv smplayer docker chrome-gnome-shell fish nix-index docker_compose git
+    mpv smplayer docker fish nix-index docker_compose git
     noto-fonts-emoji emojione xsel bazel gnumake imagemagick curl direnv
     stack xvfb_run jq pcre kdiff3 postgresql_10 poppler_utils xmlstarlet
     libssh2 libxml2 tree gcc binutils autoconf automake gparted
-    haskellPackages.ghcid hlint gimp chromium ghc flatpak
+    haskellPackages.ghcid hlint gimp ghc flatpak
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
     gnome3.dconf-editor gnome3.gnome-tweaks p7zip zip unzip pciutils usbutils
     dds-thumbnailer webp-thumbnailer # swf-thumbnailer # doesn't work yet :(
@@ -120,9 +118,6 @@ in rec {
   # programs.mtr.enable = lib.mkDefault true;
   # programs.gnupg.agent = { enable = lib.mkDefault true; enableSSHSupport = lib.mkDefault true; };
   programs.fish.enable = lib.mkDefault true;
-
-  # List services that you want to enable:
-  services.gnome3.chrome-gnome-shell.enable = lib.mkDefault true;
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -205,13 +200,16 @@ in rec {
   services.xserver = {
     enable = true;
     layout = "us";
+
     libinput = {
       enable = true;
       tapping = true;
     };
+
     desktopManager = {
       gnome3.enable = true;
     };
+
     displayManager = {
       gdm = {
         enable = true;
@@ -224,10 +222,14 @@ in rec {
         };
       };
     };
-  };
 
-  # Enable Digimend (for Huion tablet support)
-  services.xserver.digimend.enable = true;
+    # Enable Digimend (for Huion tablet support)
+    digimend.enable = true;
+
+    # Enable WebP support in gdk-pixbuf, used by Eye of GNOME.
+    # THIS DOESNT WORK. something Absolutely Imperative is going on with pixbuf-gdk
+    gdk-pixbuf.modulePackages = [ pkgs.librsvg webp-pixbuf-loader ];
+  };
 
   # Define user accounts
   users = {

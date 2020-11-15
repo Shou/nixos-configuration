@@ -1,3 +1,10 @@
 {
-  "rust-analyzer.serverPath": "rust-analyzer"
+  "rust-analyzer.serverPath": "rust-analyzer",
+  "languageserver":{
+   "haskell": {
+     "command": "haskell-language-server-wrapper",
+     "args": ["--lsp"],
+     "filetypes": ["haskell", "lhaskell"]
+   }
+ }
 }
