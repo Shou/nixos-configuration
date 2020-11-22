@@ -111,6 +111,7 @@ in rec {
     # (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
     gnome3.dconf-editor gnome3.gnome-tweaks p7zip zip unzip pciutils usbutils
     dds-thumbnailer webp-thumbnailer # swf-thumbnailer # doesn't work yet :(
+    ntfs3g
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
