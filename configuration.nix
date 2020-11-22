@@ -56,6 +56,12 @@ in rec {
     hostName = lib.mkDefault "shou";
     networkmanager.enable = lib.mkDefault true;
     firewall.enable = lib.mkDefault false;
+
+    # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+    # Per-interface useDHCP will be mandatory in the future, so this generated config
+    # replicates the default behaviour.
+    useDHCP = false;
+    interfaces.enp37s0.useDHCP = true;
   };
 
   # Select internationalisation properties.
@@ -215,12 +221,6 @@ in rec {
       gdm = {
         enable = true;
         wayland = lib.mkDefault false;
-
-        autoLogin = {
-          # is buggy, disabled for now
-          enable = lib.mkDefault false;
-          user = lib.mkDefault "benedict";
-        };
       };
     };
 
@@ -257,8 +257,8 @@ in rec {
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment? no lol
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-20.03/";
+  system.stateVersion = "20.09"; # Did you read the comment? no lol
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-21.03/";
 
   # Satisfy Elasticsearch requirement
   boot = {

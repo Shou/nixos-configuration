@@ -13,7 +13,6 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
-    ./hardware-personal.nix
     ./../../configuration.nix
   ];
 
@@ -58,20 +57,28 @@ in {
     }
   ];
 
+  boot = {
   ### Virtualisation
-  boot.kernelModules = [
-    "kvm-amd" "kvm-intel"
-    # Add VFIO kernel modules
-    "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"
-  ];
-  # Enable IOMMU
-  boot.kernelParams = [ "amd_iommu=on" ];
-  boot.kernelPackages = master.linuxPackages_5_9;
-  # Blacklist GPU drivers
-  boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
+    kernelModules = [
+      "kvm-amd" "kvm-intel"
+      # Add VFIO kernel modules
+      "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"
+    ];
+    # Enable IOMMU
+    kernelParams = [ "amd_iommu=on" ];
+    kernelPackages = master.linuxPackages_5_9;
+    # Blacklist GPU drivers
+    blacklistedKernelModules = [ "nvidia" "nouveau" ];
 
-  # Attach GPU to VFIO driver
-  boot.extraModprobeConfig = "options vfio-pci ids=10de:1c03,10de:10f1";
+    # We're using LUKS on LVM so wait for scan
+    initrd.luks.devices.nixos.preLVM = false;
+    # Use the systemd-boot EFI boot loader.
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+
+    # Attach GPU to VFIO driver
+    extraModprobeConfig = "options vfio-pci ids=10de:1c03,10de:10f1";
+  };
 
   hardware.cpu.amd.updateMicrocode = true;
 
