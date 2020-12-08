@@ -1,10 +1,20 @@
 {
   "rust-analyzer.serverPath": "rust-analyzer",
-  "languageserver":{
-   "haskell": {
-     "command": "haskell-language-server-wrapper",
-     "args": ["--lsp"],
-     "filetypes": ["haskell", "lhaskell"]
-   }
- }
+  "languageserver": {
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": ["--lsp"],
+      "rootPatterns": [ "cabal.project", "BUILD.bazel" ],
+      "filetypes": [ "hs", "lhs", "haskell", "lhaskell" ],
+      "initializationOptions": {
+        "hlintOn": false,
+        "maxNumberOfProblems": 10,
+        "completionSnippetsOn": true
+      }
+    },
+    "nix": {
+      "command": "rnix-lsp",
+      "filetypes": [ "nix" ]
+    }
+  }
 }

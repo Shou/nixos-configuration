@@ -125,6 +125,10 @@ in {
       yats-vim
       tsuquyomi
       rust-vim
+      coc-json
+      coc-tsserver
+      coc-yaml
+      coc-fzf
     ]);
 
     extraConfig = builtins.readFile ./config/nvim/init.vim;
