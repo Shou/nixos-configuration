@@ -4,6 +4,7 @@ let
   sources = import ../../nix/sources.nix;
   stable = import sources.nixpkgs {};
   pkgs = import sources.unstable {};
+  master = import sources.master {};
 
 in {
   imports = [
@@ -11,7 +12,7 @@ in {
   ];
 
   home.packages = with pkgs; [
-    discord qbittorrent steam stable.mpv youtube-dl unar krita aseprite-unfree
+    master.discord qbittorrent steam stable.mpv master.youtube-dl unar krita aseprite-unfree
     etcher ffmpeg-full file pciutils usbutils cachix xdg_utils
   ];
 

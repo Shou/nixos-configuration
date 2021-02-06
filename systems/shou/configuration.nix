@@ -4,7 +4,7 @@ let
   sources = import ../../nix/sources.nix;
   # Maybe we _should_ consider using this one?
   # pkgs = import sources.nixpkgs {};
-  unstable = import sources.unstable {};
+  unstable = import sources.nixos-unstable {};
 
 in {
   imports = [

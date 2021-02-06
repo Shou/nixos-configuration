@@ -12,7 +12,7 @@ in {
   home.packages = (with pkgs; [
     spotify hexchat xsel firefox-bin killall pulseeffects
     xlibs.xkill
-    haskellPackages.haskell-language-server #why wont u work!!!!! AAAAAAAAAAAAA
+    haskellPackages.haskell-language-server # actually this does work (with stack)
   ]);
 
   programs.fish = {

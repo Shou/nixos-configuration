@@ -6,7 +6,7 @@
 
 let
   sources = import ../../nix/sources.nix;
-  master = import sources.master {};
+  master = import sources.master { config.allowUnfree = true; };
 
   kill-bluez = import ../../pkgs/kill-bluez { inherit pkgs; };
 
@@ -37,7 +37,13 @@ in {
     shell = pkgs.fish;
   };
 
-  services.nginx.virtualHosts."localhost".root = "/home/benedict/Videos";
+  services.nginx.virtualHosts."localhost".locations."/Videos" = {
+    root = "/home/benedict";
+    extraConfig = ''
+      autoindex on;
+    '';
+  };
+  systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
 
   services.synergy.server = {
     enable = false;
@@ -66,19 +72,23 @@ in {
     ];
     # Enable IOMMU
     kernelParams = [ "amd_iommu=on" ];
-    kernelPackages = master.linuxPackages_5_9;
+    kernelPackages = pkgs.linuxPackages_5_9;
     # Blacklist GPU drivers
-    blacklistedKernelModules = [ "nvidia" "nouveau" ];
+    # Disabled: don't need to blacklist when not virtualising
+    # blacklistedKernelModules = [ "nvidia" "nouveau" ];
 
-    # We're using LUKS on LVM so wait for scan
+    # We're using LUKS on LVM so wait for scan (i.e. post LVM)
     initrd.luks.devices.nixos.preLVM = false;
     # Use the systemd-boot EFI boot loader.
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
 
     # Attach GPU to VFIO driver
-    extraModprobeConfig = "options vfio-pci ids=10de:1c03,10de:10f1";
+    # Disabled: don't need GPU passthrough when not virtualising
+    # extraModprobeConfig = "options vfio-pci ids=10de:1c03,10de:10f1";
   };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.cpu.amd.updateMicrocode = true;
 

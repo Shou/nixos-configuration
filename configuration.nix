@@ -148,9 +148,10 @@ in rec {
     virtualHosts = {
       "localhost" = {
         default = lib.mkDefault true;
-        root = lib.mkDefault "/home/benedict/Public";
+        root = null;
 
-        locations."/" = {
+        locations."/Public" = {
+          root = "/home/benedict";
           extraConfig = lib.mkDefault ''
             autoindex on;
           '';
@@ -158,6 +159,8 @@ in rec {
       };
     };
   };
+  # Consider setting this if reading from /home directories is desired
+  # systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
 
   # Enable Docker daemon.
   virtualisation.docker.enable = lib.mkDefault true;
