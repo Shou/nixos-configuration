@@ -223,6 +223,10 @@ in rec {
     };
 
     displayManager = {
+      autoLogin = {
+        enable = lib.mkDefault false;
+        user = "benedict";
+      };
       gdm = {
         enable = true;
         wayland = lib.mkDefault false;

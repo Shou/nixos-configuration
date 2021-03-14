@@ -37,6 +37,8 @@ in {
     shell = pkgs.fish;
   };
 
+  services.xserver.displayManager.autoLogin.enable = true;
+
   services.nginx.virtualHosts."localhost".locations."/Videos" = {
     root = "/home/benedict";
     extraConfig = ''

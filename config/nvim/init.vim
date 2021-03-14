@@ -69,7 +69,9 @@ autocmd FileType purescript nnoremap <buffer> <silent> <leader>g :Pgoto<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>p :Pursuit<CR>
 autocmd FileType purescript nnoremap <buffer> <silent> <leader>T :Ptype<CR>
 
-" Javascript syntax config -- this isn't really used but i'm keeping it here for posterity
+" Yes, this is totally a joke hahaaa it definitely did not increase the
+" legibility of the code or anything and kept me using it past the joke lol
+" that would be crazy
 let g:javascript_conceal_function = "🔪"
 let g:javascript_conceal_null = "🍩"
 let g:javascript_conceal_this = "🤳"
