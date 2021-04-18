@@ -129,6 +129,7 @@ in {
       coc-tsserver
       coc-yaml
       coc-fzf
+      coc-rust-analyzer
     ]);
 
     extraConfig = builtins.readFile ./config/nvim/init.vim;

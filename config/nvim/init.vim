@@ -28,6 +28,9 @@ set shiftwidth=2
 set expandtab
 set mouse=a
 
+" language-server: Required for operations modifying multiple buffers like rename
+set hidden
+
 " Set <leader> key to spacebar
 let mapleader = ' '
 
