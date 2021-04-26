@@ -4,16 +4,16 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 autocmd ColorScheme * highlight CocUnderline cterm=underline ctermbg=lightred
 
 " Bright summer theme for happy summer days *unsheathes ice cold coke can*
-" color Tomorrow
+color Tomorrow
 " Make the highlight a softer gray
-" hi CursorColumn ctermbg=255
-" hi CursorLine ctermbg=255
+hi CursorColumn ctermbg=255
+hi CursorLine ctermbg=255
 
 " Dark winter theme like my soul *unsheathes blade*
-color alduin
+" color alduin
 " Make cursor line/column less bright with alduin
-hi CursorLine ctermbg=237
-hi CursorColumn ctermbg=237
+" hi CursorLine ctermbg=237
+" hi CursorColumn ctermbg=237
 
 filetype plugin indent on
 
