@@ -20,4 +20,9 @@ in {
     "org/gnome/settings-daemon/plugins/power".sleep-inactive-ac-timeout = 7200;
     "org/gnome/desktop/screensaver".lock-delay = 3600;
   };
+
+  home.file."mpv-config" = {
+    source = ./config/mpv/mpv.conf;
+    target = ".config/mpv/mpv.conf";
+  };
 }

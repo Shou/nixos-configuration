@@ -6,6 +6,8 @@ let
   pkgs = import sources.unstable {};
   lib = pkgs.lib;
 
+  vim-godot = pkgs.callPackage (import ./pkgs/vim-godot) {};
+
 in {
   programs.home-manager.enable = true;
 
@@ -131,6 +133,7 @@ in {
       coc-yaml
       coc-fzf
       coc-rust-analyzer
+      vim-godot
     ]);
 
     extraConfig = builtins.readFile ./config/nvim/init.vim;
