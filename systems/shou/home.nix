@@ -13,6 +13,6 @@ in {
   programs.bash.enable = false;
 
   home.packages = with pkgs; [
-    unstable.discord krita steam
+    unstable.discord master.krita steam
   ];
 }

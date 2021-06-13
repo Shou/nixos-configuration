@@ -12,7 +12,7 @@ in {
   ];
 
   home.packages = with pkgs; [
-    master.discord qbittorrent steam stable.mpv master.youtube-dl unar krita aseprite-unfree
+    master.discord qbittorrent steam stable.mpv master.youtube-dl unar master.krita master.aseprite-unfree
     etcher ffmpeg-full file pciutils usbutils cachix xdg_utils
   ];
 
@@ -22,7 +22,7 @@ in {
   };
 
   home.file."mpv-config" = {
-    source = ./config/mpv/mpv.conf;
+    source = ../../config/mpv/mpv.conf;
     target = ".config/mpv/mpv.conf";
   };
 }
